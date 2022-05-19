@@ -48,38 +48,78 @@ void fill_array_matrix(int n, double A [n][n], double x [n] ){
       A[i][j] = (double)rand()/(double)(RAND_MAX);
     }
   }
-
-    //for(int i=0; i<n; i++) {
-    //  for(int j=0;j<n;j++) {
-    //    printf("%.2f ", A[i][j]);
-    //  }
-    //  printf("\n");
-    //}
 }
 
-void multiply_matrix(int n, double A [n][n], double x [n], double b [n]){
-  //
-  // TODO
-  //
+void check_array(int n, double b [n], double b2[n] ){
+  for(int i=0; i<n; i++) {
+      if (b[i]!=b2[i]){
+        printf("Erro no cálculo!");
+        return;
+      }
+    }
+  printf("Mesmo resultados!\n");
   }
 
-//GRAVAR TEMPO!!!!!!!!!!!!!!!!!
+void multiply_matrix_v1(int n, double A [n][n], double x [n], double b [n]){
+  printf("Executando a versão 1:\n");
+  clock_t time;
+  time = clock();
+  
+  for (int i = 0; i < n; i++) {
+    for (int j = 0; j < n; j++) {
+      b[i] += A[i][j] * x[j];
+    }
+  }
+  time = clock() - time;
+  double time_taken = ((double)time) / CLOCKS_PER_SEC;  // in seconds
+  printf("Tempo gasto: %f segundos.\n", time_taken);
+}
 
+
+void multiply_matrix_v2(int n, double A [n][n], double x [n], double b [n]){
+  printf("Executando a versão 2:\n");
+  clock_t time;
+  time = clock();
+  
+  for (int i = 0; i < n; i++) {
+    for (int j = 0; j < n; j++) {
+      b[j] += A[j][i] * x[i];
+    }
+  }
+  time = clock() - time;
+  double time_taken = ((double)time) / CLOCKS_PER_SEC;  // in seconds
+  printf("Tempo gasto: %f segundos.\n", time_taken);
+}
+
+
+//GRAVAR TEMPO!!!!!!!!!!!!!!!!!
+// gcc -o mult mult_matriz.c -lm
 //FAZER GRAFICO!!!!!!!!!!!!!!!!
 
 
 int main(int argc, char *argv[]){
-  double ramgb = atoi(argv[1]);
+  int ramgb = atoi(argv[1]);
   //printf("Quantidade de memória da máquina: ");
   //scanf("%lf", &ramgb);  
-  printf("Iniciando os teste com RAM = %.2lfGB\n",ramgb);
+  printf("Iniciando os teste com RAM = %dGB\n",ramgb);
   int n = matrix_lenght(ramgb);
-  n/=20;
+  
+  n/=20; // apenas por limitação do replit
   n = (int) floor(n);
+
+  //n = 4;
+  
   double A[n][n];
   double x[n];
   fill_array_matrix(n, A, x);
+  double b[n];
+  double b2[n];
+  // preenchendo com 0
+  memset(b, 0, sizeof b);
+  memset(b2, 0, sizeof b2);
   
-  //printf("%d\n", resultado);
+  multiply_matrix_v1(n, A, x, b);
+  multiply_matrix_v2(n, A, x, b2);
+  check_array(n, b, b2);
   return 0;
 }
