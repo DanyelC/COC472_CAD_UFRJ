@@ -100,19 +100,21 @@ double multiply_matrix_v2(int n, double A [n][n], double x [n], double b [n]){
 
 int main(int argc, char *argv[]){
   system("clear");
-  FILE *file = fopen("resultados.txt", "a");
+  FILE *file = fopen("resultados.csv", "a");
+  fprintf(file, "N, GB, t1, t2\n");
   for(int i=1;i<argc;++i){
     int ramgb = atoi(argv[i]);
-    fprintf(file, "================= %d =================\n\n", ramgb);
+    int n = matrix_lenght(ramgb);  
+    n/=20; // apenas por limitação do replit
+    n = (int) floor(n);
     for(int i=1;i<11;++i){
+
+      fprintf(file, "%d, %d, ", n, ramgb);
       printf("Recebido: %d\n", ramgb);
       //printf("Quantidade de memória da máquina: ");
       //scanf("%lf", &ramgb);  
       printf("Iniciando os teste com RAM = %dGB\n",ramgb);
-      int n = matrix_lenght(ramgb);
       
-      n/=20; // apenas por limitação do replit
-      n = (int) floor(n);
     
       //n = 4;
       
@@ -130,8 +132,8 @@ int main(int argc, char *argv[]){
       check_array(n, b, b2);
   
 
-      fprintf(file, "%f\n", t1);
-      fprintf(file, "%f\n", t2);
+      fprintf(file, "%f, ", t1);
+      fprintf(file, "%f", t2);
       fprintf(file, "\n");
       printf("\n\n");
     }
