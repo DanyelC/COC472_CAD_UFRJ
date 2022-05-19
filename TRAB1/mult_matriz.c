@@ -7,6 +7,7 @@
 #include <math.h>
 #include <locale.h>
 
+
 float matrix_lenght(float rambg){
 //(n^2 + 2 n) * 64 bits = 
   double max = rambg*pow(10,9)*8; // em bits
@@ -60,7 +61,7 @@ void check_array(int n, double b [n], double b2[n] ){
   printf("Mesmo resultados!\n");
   }
 
-void multiply_matrix_v1(int n, double A [n][n], double x [n], double b [n]){
+double multiply_matrix_v1(int n, double A [n][n], double x [n], double b [n]){
   printf("Executando a versão 1:\n");
   clock_t time;
   time = clock();
@@ -73,10 +74,11 @@ void multiply_matrix_v1(int n, double A [n][n], double x [n], double b [n]){
   time = clock() - time;
   double time_taken = ((double)time) / CLOCKS_PER_SEC;  // in seconds
   printf("Tempo gasto: %f segundos.\n", time_taken);
+  return time_taken;
 }
 
 
-void multiply_matrix_v2(int n, double A [n][n], double x [n], double b [n]){
+double multiply_matrix_v2(int n, double A [n][n], double x [n], double b [n]){
   printf("Executando a versão 2:\n");
   clock_t time;
   time = clock();
@@ -89,37 +91,51 @@ void multiply_matrix_v2(int n, double A [n][n], double x [n], double b [n]){
   time = clock() - time;
   double time_taken = ((double)time) / CLOCKS_PER_SEC;  // in seconds
   printf("Tempo gasto: %f segundos.\n", time_taken);
+  return time_taken;
 }
 
-
-//GRAVAR TEMPO!!!!!!!!!!!!!!!!!
 // gcc -o mult mult_matriz.c -lm
 //FAZER GRAFICO!!!!!!!!!!!!!!!!
 
 
 int main(int argc, char *argv[]){
-  int ramgb = atoi(argv[1]);
-  //printf("Quantidade de memória da máquina: ");
-  //scanf("%lf", &ramgb);  
-  printf("Iniciando os teste com RAM = %dGB\n",ramgb);
-  int n = matrix_lenght(ramgb);
+  system("clear");
+  FILE *file = fopen("resultados.txt", "a");
+  for(int i=1;i<argc;++i){
+    int ramgb = atoi(argv[i]);
+    fprintf(file, "================= %d =================\n\n", ramgb);
+    for(int i=1;i<11;++i){
+      printf("Recebido: %d\n", ramgb);
+      //printf("Quantidade de memória da máquina: ");
+      //scanf("%lf", &ramgb);  
+      printf("Iniciando os teste com RAM = %dGB\n",ramgb);
+      int n = matrix_lenght(ramgb);
+      
+      n/=20; // apenas por limitação do replit
+      n = (int) floor(n);
+    
+      //n = 4;
+      
+      double A[n][n];
+      double x[n];
+      fill_array_matrix(n, A, x);
+      double b[n];
+      double b2[n];
+      // preenchendo com 0
+      memset(b, 0, sizeof b);
+      memset(b2, 0, sizeof b2);
+      
+      double t1 = multiply_matrix_v1(n, A, x, b);
+      double t2 = multiply_matrix_v2(n, A, x, b2);
+      check_array(n, b, b2);
   
-  n/=20; // apenas por limitação do replit
-  n = (int) floor(n);
 
-  //n = 4;
-  
-  double A[n][n];
-  double x[n];
-  fill_array_matrix(n, A, x);
-  double b[n];
-  double b2[n];
-  // preenchendo com 0
-  memset(b, 0, sizeof b);
-  memset(b2, 0, sizeof b2);
-  
-  multiply_matrix_v1(n, A, x, b);
-  multiply_matrix_v2(n, A, x, b2);
-  check_array(n, b, b2);
+      fprintf(file, "%f\n", t1);
+      fprintf(file, "%f\n", t2);
+      fprintf(file, "\n");
+      printf("\n\n");
+    }
+  }
+  fclose(file);
   return 0;
 }
