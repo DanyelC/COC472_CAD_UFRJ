@@ -3,13 +3,9 @@ PROGRAM Main
   implicit none
   real(dp)  :: u, i_b, f_b, i_b2, f_b2
   integer  :: i, j, count_, contador
-  !integer, parameter  :: n = 4
-  !real(dp), dimension (n,n)  ::  A
-  !real(dp), dimension (n)  ::  x, b, b2
   integer  ::  n
   real(dp), allocatable  :: A(:,:)
   real(dp), allocatable  ::  x(:), b(:), b2(:)
-  !real(dp)  ::  matrix_length_r
   CHARACTER(len=32)  ::  arg
   real(dp) :: ramgb_in
 
@@ -27,7 +23,7 @@ PROGRAM Main
       allocate(x(n))
       allocate(b(n))
       allocate(b2(n))
-      !write(*, '(a35)', advance = "no") floor(matrix_length_r)
+
     ! Matriz A
       do i = 1, n
         do j = 1, n
@@ -70,7 +66,6 @@ PROGRAM Main
       call cpu_time(f_b2)
     
     
-      ! ------------------------------------------------------ Results time
       print '(I0, ",", f10.6, ",", f10.6, ",", f10.6)', n, ramgb_in, f_b - i_b, f_b2 - i_b2
       deallocate(A)
       deallocate(x)
