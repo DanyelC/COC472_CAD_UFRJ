@@ -11,7 +11,7 @@ PROGRAM Main
   real(dp), allocatable  ::  x(:), b(:), b2(:)
   !real(dp)  ::  matrix_length_r
   CHARACTER(len=32)  ::  arg
-  real(dp) :: intl
+  real(dp) :: ramgb_in
 
   print *, "N, GB, t1, t2"
 
@@ -20,9 +20,9 @@ PROGRAM Main
     IF (LEN_TRIM(arg) == 0) EXIT
     !WRITE (*,*) TRIM(arg)
     !write(*, '(a35)', advance = "no") arg
-    read( arg, '(d10.0)' )  intl
+    read( arg, '(d10.0)' )  ramgb_in
     DO contador = 1,10
-      n = matrix_length(intl)
+      n = matrix_length(ramgb_in)
       allocate(A(n,n))
       allocate(x(n))
       allocate(b(n))
@@ -71,7 +71,7 @@ PROGRAM Main
     
     
       ! ------------------------------------------------------ Results time
-      print '(I0, ",", I0, ",", f10.6, ",", f10.6)', n, floor(intl), f_b - i_b, f_b2 - i_b2
+      print '(I0, ",", f10.6, ",", f10.6, ",", f10.6)', n, ramgb_in, f_b - i_b, f_b2 - i_b2
       deallocate(A)
       deallocate(x)
       deallocate(b)
