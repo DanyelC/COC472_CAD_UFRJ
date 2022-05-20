@@ -1,17 +1,16 @@
 PROGRAM Main
   use, intrinsic :: iso_fortran_env, only: dp=>real64
   implicit none
-  real                      :: u, startB, finishB, startC, finishC
-  integer                   :: i, j
-  integer, parameter        :: n = 100
-  real(dp), dimension (n,n)     :: A
-  real(dp), dimension (n)     :: x, b, b2
-  real(dp) :: matrix_lenght_r
-  CHARACTER(len=32) :: arg
+  real(dp)  :: u, i_b, f_b, i_b2, f_b2
+  integer  :: i, j
+  integer, parameter  :: n = 4
+  real(dp), dimension (n,n)  ::  A
+  real(dp), dimension (n)  ::  x, b, b2
+  real(dp)  ::  matrix_lenght_r
+  CHARACTER(len=32)  ::  arg
   real(dp) :: intl
 
-
-  ! ------------------------------------------------------ Matrix A
+! Matriz A
   do i = 1, n
     do j = 1, n
       call random_number(u)
@@ -19,112 +18,69 @@ PROGRAM Main
     end do
   end do
 
-  if(printMatrixs) then
-    print*, ""
-    print*, "Matriz A:"
-    do i = 1, n
-      print*, A(i,:)
-    end do
-  end if
 
-
-
-  ! ------------------------------------------------------ Matrix x
+  ! Vetor x
   do i = 1, n
     call random_number(u)
     x(i) = u
   end do
   
-  if(printMatrixs) then
-    print*, ""
-    print*, "Matriz x:"
-    do i = 1, n
-      print*, x(i)
-    end do
-  end if
 
+! Metodo 1
 
-
-  ! ------------------------------------------------------ Matrix b
+  ! Vetor b
   b = 0.0
-  call cpu_time(startB)
+  call cpu_time(i_b)
   do i = 1, n
     do j = 1, n
       b(i) = b(i) + A(i,j) * x(j)
     end do
   end do
-  call cpu_time(finishB)
-
-  if(printMatrixs) then
-    print*, ""
-    print*, "Matriz b:"
-    do i = 1, n
-      print*, b(i)
-    end do
-  end if
+  call cpu_time(f_b)
 
 
+! Metodo 2
 
-  ! ------------------------------------------------------ Matrix c
+  ! Vetor b2
   b2 = 0.0
-  call cpu_time(startC)
+  call cpu_time(i_b2)
   do j = 1, n
     do i = 1, n
-      b(i) = b(i) + A(i,j) * x(j)
+      b2(i) = b2(i) + A(i,j) * x(j)
     end do
   end do
-  call cpu_time(finishC)
-
-
-  if(printMatrixs) then
-    print*, ""
-    print*, "Matriz c:"
-    do i = 1, n
-      print*, b2(i)
-    end do
-  end if
-
+  call cpu_time(f_b2)
 
 
   ! ------------------------------------------------------ Results time
-  !print '(I0, ",", f10.6, ",", f10.6)', n, finishB - startB, finishC - startC
+  !print '(I0, ",", f10.6, ",", f10.6)', n, f_b - i_b, f_b2 - i_b2
   
   DO i = 1,3
     CALL get_command_argument(i, arg)
     IF (LEN_TRIM(arg) == 0) EXIT
     !WRITE (*,*) TRIM(arg)
-    print*,arg
+    write(*, '(a35)', advance = "no") arg
     read( arg, '(d10.0)' )  intl
     matrix_lenght_r = matrix_lenght(floor(intl))
-    print*, "ok"
     print *,floor(matrix_lenght_r)
   END DO
-
 
 contains
   
   real(dp) function matrix_lenght(ramgb)
     implicit none
-    !integer :: ramgb
-    real(dp) :: c
-    real :: a, b
-    real :: discriminant
-    real :: x1, x2
-    integer :: ramgb
-    integer :: i
+    integer:: a, b, ramgb, i
+    real(dp) :: c, discriminant, x1, x2
 
     a = 1
     b = 2
     matrix_lenght = 0
     
-    !print *,ramgb(i)*8/64*1000000000*(-1) !!!!problema aqui!!!!
     c = ramgb*8
     c = c/64*(-1)
     c = c*1000000000   
-    !print *,c
+
     discriminant = b**2 - 4*a*c
-    !print *,discriminant
-    !print *,sqrt(discriminant)
     
     if ( discriminant>0 ) then
     
@@ -140,4 +96,5 @@ contains
       matrix_lenght = x1
     end if
   end function matrix_lenght
+
 END PROGRAM Main
