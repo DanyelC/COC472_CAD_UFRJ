@@ -18,8 +18,7 @@ float matrix_lenght(float rambg){
   a = 1;
   b = 2;
   
-  //printf("\nf(x) = x² + 2x + %.2f\n", c);
-  
+
   delta = pow(b,2) - 4*a*c;
   if(delta >= 0){
     if(delta == 0){
