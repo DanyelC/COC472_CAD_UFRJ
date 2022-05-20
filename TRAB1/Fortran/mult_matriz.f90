@@ -1,51 +1,14 @@
 PROGRAM Main
   use, intrinsic :: iso_fortran_env, only: dp=>real64
   implicit none
-
   real                      :: u, startB, finishB, startC, finishC
   integer                   :: i, j
-  integer, parameter        :: n = 1000
+  integer, parameter        :: n = 100
   real(dp), dimension (n,n)     :: A
   real(dp), dimension (n)     :: x, b, b2
-  logical                   :: printMatrixs = .false. ! Change the value in order to print the matrices
-
-
-function matrix_lenght(rambg) result(x)
-  implicit none
-  integer, intent(in) :: ramgb
-  !integer :: a
-  !integer :: b
-  real(dp) :: max_
-  real(dp) :: c
-  real(dp) :: delta
-  real(dp) :: x
-  real(dp) :: x1
-  real(dp) :: x2
-  max_ = rambg*(10**9)*8 
-  c = -1*max_/64
-  !a = 1
-  !b = 2
- 
-  delta = (2**2) - 4*1*c
-  if(delta >= 0) then
-    if(delta == 0) then
-      x1 = -2 / (2 * 1)
-      !printf("Tamanho máximo dos arrays: %d\n",(int) floor(x1));
-      x=x1
-      end function matrix_lenght
-      end if
-    x1 = (-2 - sqrt(delta)) / (2 * 1)
-    x2 = (-2 + sqrt(delta)) / (2 * 1)
-    if(x1>x2) then
-      !printf("Tamanho máximo dos arrays: %d\n",(int) floor(x1));
-      x=x1
-      end function matrix_lenght
-    end if
-    !printf("Tamanho máximo dos arrays: %d\n",(int) floor(x2));
-    x=x2
-    end function matrix_lenght
-      
-  end function matrix_lenght
+  real(dp) :: matrix_lenght_r
+  CHARACTER(len=32) :: arg
+  real(dp) :: intl
 
 
   ! ------------------------------------------------------ Matrix A
@@ -124,6 +87,57 @@ function matrix_lenght(rambg) result(x)
 
 
   ! ------------------------------------------------------ Results time
-  print '(I0, ",", f10.6, ",", f10.6)', n, finishB - startB, finishC - startC
+  !print '(I0, ",", f10.6, ",", f10.6)', n, finishB - startB, finishC - startC
+  
+  DO i = 1,3
+    CALL get_command_argument(i, arg)
+    IF (LEN_TRIM(arg) == 0) EXIT
+    !WRITE (*,*) TRIM(arg)
+    print*,arg
+    read( arg, '(d10.0)' )  intl
+    matrix_lenght_r = matrix_lenght(floor(intl))
+    print*, "ok"
+    print *,floor(matrix_lenght_r)
+  END DO
 
+
+contains
+  
+  real(dp) function matrix_lenght(ramgb)
+    implicit none
+    !integer :: ramgb
+    real(dp) :: c
+    real :: a, b
+    real :: discriminant
+    real :: x1, x2
+    integer :: ramgb
+    integer :: i
+
+    a = 1
+    b = 2
+    matrix_lenght = 0
+    
+    !print *,ramgb(i)*8/64*1000000000*(-1) !!!!problema aqui!!!!
+    c = ramgb*8
+    c = c/64*(-1)
+    c = c*1000000000   
+    !print *,c
+    discriminant = b**2 - 4*a*c
+    !print *,discriminant
+    !print *,sqrt(discriminant)
+    
+    if ( discriminant>0 ) then
+    
+      x1 = ( -b + sqrt(discriminant)) / (2 * a)
+      x2 = ( -b - sqrt(discriminant)) / (2 * a)
+      if (x1>x2) then
+        matrix_lenght = x1
+      else if (x2>x1) then
+        matrix_lenght = x2
+      end if
+    else if ( discriminant==0 ) then
+      x1 = - b / (2 * a)
+      matrix_lenght = x1
+    end if
+  end function matrix_lenght
 END PROGRAM Main
