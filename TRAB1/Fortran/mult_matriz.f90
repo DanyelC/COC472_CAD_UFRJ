@@ -22,7 +22,7 @@ PROGRAM Main
     !write(*, '(a35)', advance = "no") arg
     read( arg, '(d10.0)' )  intl
     DO contador = 1,10
-      n = matrix_length(floor(intl))
+      n = matrix_length(intl)
       allocate(A(n,n))
       allocate(x(n))
       allocate(b(n))
@@ -83,8 +83,8 @@ contains
   
   real(dp) function matrix_length(ramgb)
     implicit none
-    integer:: a, b, ramgb, i
-    real(dp) :: c, discriminant, x1, x2
+    integer:: a, b, i
+    real(dp) :: c, discriminant, x1, x2, ramgb
 
     a = 1
     b = 2

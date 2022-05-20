@@ -8,15 +8,16 @@
 #include <locale.h>
 
 
-float matrix_lenght(float rambg){
-//(n^2 + 2 n) * 64 bits = 
-  double max = rambg*pow(10,9)*8; // em bits
+double matrix_lenght(double ramgb){
+//(n^2 + 2 n) * 64 bits =
+  //printf("%f\n", ramgb);
+  double max = ramgb*pow(10,9)*8; // em bits
   double c = -1*max/64;
   // definindo a eq do segundo grau para encontrar o tamanho máximo dos arrays
   
-  float a, b, delta, x1, x2;
-  a = 1;
-  b = 2;
+  double a, b, delta, x1, x2;
+  a = 1.0;
+  b = 2.0;
   
 
   delta = pow(b,2) - 4*a*c;
@@ -102,17 +103,19 @@ int main(int argc, char *argv[]){
   FILE *file = fopen("resultados.csv", "a");
   fprintf(file, "N, GB, t1, t2\n");
   for(int i=1;i<argc;++i){
-    int ramgb = atoi(argv[i]);
+    //printf("argv %s\n",argv[i]);
+    double ramgb = strtof(argv[i], NULL);
+    //printf("ramgb %f\n",strtof(argv[i], NULL));
     int n = matrix_lenght(ramgb);  
-    n/=20; // apenas por limitação do replit
-    n = (int) floor(n);
+    //n/=20; // apenas por limitação do replit
+    //n = (int) floor(n); // apenas por limitação do replit
     for(int i=1;i<11;++i){
 
-      fprintf(file, "%d, %d, ", n, ramgb);
-      printf("Recebido: %d\n", ramgb);
+      fprintf(file, "%d, %f, ", n, ramgb);
+      printf("Recebido: %f\n", ramgb);
       //printf("Quantidade de memória da máquina: ");
       //scanf("%lf", &ramgb);  
-      printf("Iniciando os teste com RAM = %dGB\n",ramgb);
+      printf("Iniciando os teste com RAM = %fGB\n",ramgb);
       
     
       //n = 4;
