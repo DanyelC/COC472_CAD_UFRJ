@@ -11,13 +11,12 @@ PROGRAM Main
 
   print *, "N, GB, t1, t2"
 
-  DO count_ = 1,3
+  DO count_ = 1,30
     CALL get_command_argument(count_, arg)
     IF (LEN_TRIM(arg) == 0) EXIT
     !WRITE (*,*) TRIM(arg)
     !write(*, '(a35)', advance = "no") arg
     read( arg, '(d10.0)' )  ramgb_in
-    DO contador = 1,10
       n = matrix_length(ramgb_in)
       allocate(A(n,n))
       allocate(x(n))
@@ -71,7 +70,6 @@ PROGRAM Main
       deallocate(x)
       deallocate(b)
       deallocate(b2)
-    END DO
   END DO
 
 contains

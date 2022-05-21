@@ -109,7 +109,6 @@ int main(int argc, char *argv[]){
     int n = matrix_lenght(ramgb);  
     //n/=20; // apenas por limitação do replit
     //n = (int) floor(n); // apenas por limitação do replit
-    for(int i=1;i<11;++i){
 
       fprintf(file, "%d, %f, ", n, ramgb);
       printf("Recebido: %f\n", ramgb);
@@ -138,7 +137,6 @@ int main(int argc, char *argv[]){
       fprintf(file, "%f", t2);
       fprintf(file, "\n");
       printf("\n\n");
-    }
   }
   fclose(file);
   return 0;
